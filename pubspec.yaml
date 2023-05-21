@@ -1,0 +1,24 @@
+name: aigc_wallpaper
+version: 1.0.0+1
+publish_to: none
+description: 一个通过AI生成的壁纸产品，每日不定时更新精美壁纸
+environment: 
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  flutter: 
+    sdk: flutter  
+  cupertino_icons: ^1.0.2
+  get: ^4.6.5
+  cached_network_image: ^3.2.3
+  async_wallpaper: ^2.0.2
+
+
+dev_dependencies: 
+  flutter_lints: 2.0.1
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
+  uses-material-design: true
+
