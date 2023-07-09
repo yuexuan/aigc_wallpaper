@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,55 +15,24 @@ class PageViewWidget extends GetView<HomeController> {
 
     return GetBuilder<HomeController>(
         init: HomeController(),
-        builder: (controller) {
+        builder: (_) {
           final imageUrls = controller.imageUrls;
-
+          if (kDebugMode) {
+            print("build imageUrls=$imageUrls");
+          }
           if (imageUrls.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
-
-          // return MediaQuery.removePadding(
-          //     context: context,
-          //     removeTop: true,
-          //     removeBottom: true,
-          //     child: SizedBox(
-          //       height: screenHeight, // 将容器的高度设置为屏幕高度
-          //       child: PageView.builder(
-          //         itemCount: imageUrls.length,
-          //         onPageChanged: (int index) {
-          //           controller.setCurrentPageIndex(index);
-          //         },
-          //         itemBuilder: (BuildContext context, int index) {
-          //           return Container(
-          //               color: Colors.blueGrey,
-          //               child: GestureDetector(
-          //                 // onTap: () =>
-          //                 //     controller.setWallpaper(1, imageUrls[index]),
-          //                 // onTap: () => _showImageOptionsDialog(context),
-          //                 onLongPress: () => _showImageOptionsDialog(context),
-          //                 child: CachedNetworkImage(
-          //                   imageUrl: imageUrls[index],
-          //                   fit: BoxFit.fill,
-          //                   placeholder: (context, url) => const Center(
-          //                       child: CircularProgressIndicator()),
-          //                   errorWidget: (context, url, error) =>
-          //                       const Center(child: Icon(Icons.error)),
-          //                 ),
-          //               ));
-          //         },
-          //       ),
-          //     )
-          //   );
           return PageView.builder(
             controller: pageController,
-            scrollDirection: Axis.vertical,
-            itemCount: 100,
+            scrollDirection: Axis.horizontal,
+            itemCount: imageUrls.length,
             itemBuilder: (context, index) {
               return SingleChildScrollView(
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: PageView.builder(
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
                     itemCount: 16,
                     controller: PageController(
                         initialPage: controller.currentHorizontalIndex),
@@ -73,19 +43,7 @@ class PageViewWidget extends GetView<HomeController> {
                       return Container(
                           color: Colors.accents[(index * 3 + horizontalIndex) %
                               Colors.accents.length],
-                          // child: Center(
-                          //   child: Text(
-                          //     'Page ${index + 1}-${horizontalIndex + 1}',
-                          //     style: const TextStyle(
-                          //       fontSize: 32,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
                           child: GestureDetector(
-                            // onTap: () =>
-                            //     controller.setWallpaper(1, imageUrls[index]),
-                            // onTap: () => _showImageOptionsDialog(context),
                             onLongPress: () => _showImageOptionsDialog(context),
                             child: CachedNetworkImage(
                               imageUrl: imageUrls[index][horizontalIndex],
@@ -106,6 +64,7 @@ class PageViewWidget extends GetView<HomeController> {
   }
 
   void _showImageOptionsDialog(BuildContext context) {
+    print("current imgurl=${controller.currentImageUrl}");
     showDialog(
       context: context,
       builder: (BuildContext context) {
